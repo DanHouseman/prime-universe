@@ -17,6 +17,8 @@ jobs:
     name: Production build
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      NPM_CONFIG_REGISTRY: https://registry.npmjs.org
     defaults:
       run:
         working-directory: prime-universe
@@ -36,6 +38,27 @@ jobs:
           ref: 54a9a5526197c3b5f20117f25557b51eb0d86001
           path: prime-engine-ecosystem-v0.10.0
           persist-credentials: false
+
+      # The pinned upstream lockfile contains internal mirror URLs.
+      # Keep its versions and integrity hashes, changing only that URL prefix.
+      - name: Use public npm tarballs for Prime Engine
+        working-directory: prime-engine-ecosystem-v0.10.0
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync, writeFileSync } from 'node:fs';
+          const path = 'package-lock.json';
+          const lock = JSON.parse(readFileSync(path, 'utf8'));
+          const mirror = 'https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/';
+          let updated = 0;
+          for (const pkg of Object.values(lock.packages)) {
+            if (pkg.resolved?.startsWith(mirror)) {
+              pkg.resolved = 'https://registry.npmjs.org/' + pkg.resolved.slice(mirror.length);
+              updated++;
+            }
+          }
+          writeFileSync(path, JSON.stringify(lock, null, 2) + '\n');
+          console.log(`Updated ${updated} Prime Engine tarball URLs to public npm.`);
+          NODE
 
       - name: Set up Node.js
         uses: actions/setup-node@v7
