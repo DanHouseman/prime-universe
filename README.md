@@ -1,5 +1,7 @@
 # Prime Universe 3D v2.1.0
 
+![alt text](https://raw.githubusercontent.com/DanHouseman/prime-universe/refs/heads/main/prime-universe.png)
+
 Explore prime numbers, divisibility, and arithmetic patterns as an interactive
 3D landscape. Each sphere represents an integer from 1 to **Maximum N**. Its
 position comes from the selected layout, while its size and color can encode
@@ -144,3 +146,4 @@ versions and integrity hashes.
 
 Commit `package-lock.json` along with the app source and workflow so CI can
 install the locked dependencies.
+

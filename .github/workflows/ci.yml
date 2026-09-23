@@ -1,4 +1,4 @@
-name: CI Build
+name: Build and Deploy
 
 on:
   push:
@@ -81,7 +81,7 @@ jobs:
         run: npm ci
 
       - name: Build Prime Universe
-        run: npm run build
+        run: npm run build -- --base=/prime-universe/
 
       - name: Upload production build
         uses: actions/upload-artifact@v7
@@ -90,3 +90,29 @@ jobs:
           path: prime-universe/dist/
           if-no-files-found: error
           retention-days: 14
+
+      - name: Upload GitHub Pages artifact
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: prime-universe/dist/
+
+  deploy:
+    name: Deploy to GitHub Pages
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
