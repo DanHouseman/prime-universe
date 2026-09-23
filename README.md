@@ -2,6 +2,8 @@
 
 ![alt text](https://raw.githubusercontent.com/DanHouseman/prime-universe/refs/heads/main/prime-universe.png)
 
+**INTERACTIVE DEMO**: https://www.danhouseman.com/prime-universe/
+
 Explore prime numbers, divisibility, and arithmetic patterns as an interactive
 3D landscape. Each sphere represents an integer from 1 to **Maximum N**. Its
 position comes from the selected layout, while its size and color can encode
