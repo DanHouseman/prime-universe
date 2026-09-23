@@ -1,0 +1,69 @@
+name: CI Build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Production build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: prime-universe
+
+    steps:
+      - name: Check out Prime Universe
+        uses: actions/checkout@v7
+        with:
+          path: prime-universe
+          persist-credentials: false
+
+      # Preserve the sibling path required by package.json's file: dependency.
+      - name: Check out Prime Engine
+        uses: actions/checkout@v7
+        with:
+          repository: danhouseman/prime-engine
+          ref: 54a9a5526197c3b5f20117f25557b51eb0d86001
+          path: prime-engine-ecosystem-v0.10.0
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            prime-universe/package-lock.json
+            prime-engine-ecosystem-v0.10.0/package-lock.json
+
+      - name: Install Prime Engine dependencies
+        working-directory: prime-engine-ecosystem-v0.10.0
+        run: npm ci
+
+      - name: Build Prime Engine
+        working-directory: prime-engine-ecosystem-v0.10.0
+        run: npm run build:core
+
+      - name: Install Prime Universe dependencies
+        run: npm ci
+
+      - name: Build Prime Universe
+        run: npm run build
+
+      - name: Upload production build
+        uses: actions/upload-artifact@v7
+        with:
+          name: prime-universe-dist
+          path: prime-universe/dist/
+          if-no-files-found: error
+          retention-days: 14

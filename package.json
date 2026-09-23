@@ -1,0 +1,22 @@
+{
+  "name": "its-about-primew-a-cubic-ulam-viewer",
+  "version": "2.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0"
+  },
+  "dependencies": {
+    "@danhouseman/prime-engine": "file:../prime-engine-ecosystem-v0.10.0/packages/prime-engine",
+    "three": "^0.179.1"
+  },
+  "devDependencies": {
+    "vite": "^7.0.5"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "fsevents@2.3.3": true
+  }
+}

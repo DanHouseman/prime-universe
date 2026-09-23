@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><meta name="color-scheme" content="dark light"/><title>Prime Universe 3D</title></head>
+<body><div id="app"><canvas id="scene"></canvas><aside id="panel">
+<header><div class="title-row"><div class="panel-heading"><h1>Prime Universe 3D</h1><p>Interactive cubic Ulam spiral and arithmetic-function laboratory.</p></div><div class="header-actions"><button id="themeToggle" class="theme-button" type="button" aria-label="Toggle light or dark mode">Light mode</button><button id="panelToggle" class="panel-toggle" type="button" aria-expanded="true" aria-label="Collapse control panel">◀</button></div></div></header>
+<details open><summary>Geometry</summary>
+<label>Maximum N <input id="limit" type="number" min="8" max="250000" step="100" value="12000"/></label>
+<label>Layout <select id="layout"><option value="cubic">Cubic shells</option><option value="ulam2d">Classic Ulam plane</option><option value="helix">Helix</option><option value="sphere">Spherical distribution</option><option value="hilbert">Space-filling cube</option></select></label>
+<label>Morph from cubic <input id="morph" type="range" min="0" max="1" step="0.01" value="1"/><output id="morphValue">1.00</output></label>
+<label>Sphere scale <input id="sphereScale" type="range" min="0.03" max="0.5" step="0.01" value="0.16"/><output id="sphereScaleValue">0.16</output></label>
+<label>Spacing <input id="spacing" type="range" min="0.5" max="3" step="0.05" value="1.1"/><output id="spacingValue">1.10</output></label>
+<label>Radius mapping <select id="sizeMode"><option value="tau">√τ(n)</option><option value="popcount">√popcount(n)</option><option value="phi">log φ(n)</option><option value="value">log n</option><option value="fixed">Fixed</option></select></label>
+<label class="check"><input id="showComposites" type="checkbox" checked/> Show composites</label><label class="check"><input id="highlyCompositeBoost" type="checkbox" checked/> Enlarge highly composite numbers</label>
+</details>
+<details open><summary>Color and arithmetic function</summary>
+<label class="check"><input id="colorEnabled" type="checkbox" checked/> Enable colors</label>
+<label>Color mode <select id="colorMode"><option value="tau">Divisor families τ(n)</option><option value="prime">Prime/composite</option><option value="primePower">Prime powers</option><option value="abundance">Deficient/perfect/abundant</option><option value="mobius">Möbius μ(n)</option><option value="liouville">Liouville λ(n)</option><option value="phi">Euler φ(n)</option><option value="spf">Smallest prime factor</option><option value="lpf">Largest prime factor</option><option value="primeGap">Prime gap ancestry</option><option value="constellation">Prime constellations</option><option value="residue">Residue class n mod m</option><option value="quadratic">Quadratic residues mod m</option><option value="popcount">Binary popcount</option><option value="gray">Gray code</option><option value="gaussian">Gaussian primes from (x,z)</option><option value="eisenstein">Eisenstein-prime proxy</option><option value="shellDensity">Shell prime density</option></select></label>
+<div id="colorModeDescription" class="mode-description" aria-live="polite"></div>
+<label>Palette <select id="palette"><option value="golden">Golden angle</option><option value="tableau">Tableau categorical</option><option value="viridis">Viridis</option><option value="turbo">Turbo</option><option value="spectral">Spectral</option><option value="pastel">Pastel</option><option value="neon">Neon</option><option value="monochrome">Monochrome</option><option value="custom">Custom colors</option></select></label>
+<button id="resetPalette" class="wide-button" type="button">Reset custom colors</button>
+<label>Modulus m <input id="modulus" type="number" min="2" max="97" value="7"/></label>
+<label>Luminance <input id="luminance" type="range" min="0.15" max="0.85" step="0.01" value="0.52"/><output id="luminanceValue">0.52</output></label>
+<div id="colorLegend"></div>
+</details>
+<details><summary>Connections and graphs</summary>
+<label class="check"><input id="showLines" type="checkbox" checked/> Prime axis alignments</label><label>Pair mode <select id="lineMode"><option value="adjacent">Adjacent</option><option value="all">All pairs</option><option value="rays">Infinite-looking rays</option></select></label><div class="axes"><label class="check"><input id="axisX" type="checkbox" checked/> X</label><label class="check"><input id="axisY" type="checkbox" checked/> Y</label><label class="check"><input id="axisZ" type="checkbox" checked/> Z</label></div>
+<label class="check"><input id="factorEdges" type="checkbox"/> Composite → distinct prime factors</label><label class="check"><input id="divisibilityEdges" type="checkbox"/> Divisibility lattice (sampled)</label><label class="check"><input id="collatzEdges" type="checkbox"/> Collatz edges</label><label class="check"><input id="cunninghamEdges" type="checkbox"/> Cunningham-chain edges</label><label class="check"><input id="goldbachEdges" type="checkbox"/> Goldbach decompositions (sampled)</label>
+</details>
+<details><summary>Slicing, density and motion</summary>
+<label>Clip X <input id="clipX" type="range" min="-1" max="1" step="0.01" value="1"/><output id="clipXValue">1.00</output></label><label>Clip Y <input id="clipY" type="range" min="-1" max="1" step="0.01" value="1"/><output id="clipYValue">1.00</output></label><label>Clip Z <input id="clipZ" type="range" min="-1" max="1" step="0.01" value="1"/><output id="clipZValue">1.00</output></label>
+<label>Density fog <input id="fogDensity" type="range" min="0" max="0.04" step="0.001" value="0.009"/><output id="fogDensityValue">0.009</output></label>
+<label>Visible progression <input id="progress" type="range" min="1" max="12000" step="1" value="12000"/><output id="progressValue">12000</output></label><div class="buttons"><button id="play">Play</button><button id="pause">Pause</button></div><label>Animation speed <input id="speed" type="range" min="1" max="5000" step="1" value="500"/><output id="speedValue">500</output></label>
+<label class="check"><input id="autoRotate" type="checkbox"/> Auto rotate</label><label class="check"><input id="forcePulse" type="checkbox"/> Force-universe pulse</label>
+</details>
+<div class="buttons"><button id="rebuild">Rebuild</button><button id="resetCamera">Reset camera</button><button id="screenshot">Screenshot</button><button id="exportData">Export CSV</button></div>
+<dl id="stats"><div><dt>Primes</dt><dd id="primeCount">–</dd></div><div><dt>Shell radius</dt><dd id="shellRadius">–</dd></div><div><dt>Edges</dt><dd id="lineCount">–</dd></div><div><dt>Build time</dt><dd id="buildTime">–</dd></div></dl><div class="help">Drag orbit · wheel zoom · right-drag pan · hover details</div>
+</aside><div id="tooltip" hidden></div><div id="busy" hidden><span></span><b>Building number universe…</b></div></div><script type="module" src="/src/main.js"></script></body></html>
